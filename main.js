@@ -5,6 +5,7 @@ var mantraButton = document.querySelector('.mantra');
 var receiveMessageButton = document.querySelector('.receive-message');
 var clearMessageButton = document.querySelector('.clear-message');
 var messageText = document.querySelector('.message-text');
+var likeButton = document.querySelector('.like');
 var image = document.querySelector('.image');
 var nameInput = document.querySelector('.your-name');
 var messageInput = document.querySelector('.personal-message');
@@ -21,6 +22,7 @@ var form = document.querySelector('.form');
 var showAffirmationsButton = document.querySelector('.show-affirmations');
 var showMantrasButton = document.querySelector('.show-mantras');
 var showSavedButton = document.querySelector('.show-saved');
+var showLikedButton = document.querySelector('.show-liked');
 var arrayDisplay = document.querySelector('.array-display');
 var backToMainButton = document.querySelector('.back-to-main');
 
@@ -35,7 +37,9 @@ showAllButton.addEventListener('click', showAllMessages);
 showAffirmationsButton.addEventListener('click', showAffirmations);
 showMantrasButton.addEventListener('click', showMantras);
 showSavedButton.addEventListener('click', showSaved);
+showLikedButton.addEventListener('click', showLikedMessages);
 backToMainButton.addEventListener('click', backToMain);
+likeButton.addEventListener('click', likeMessage);
 
 //event handlers
 
@@ -54,6 +58,7 @@ function backToMain(){
     personalForm.classList.add('hidden');
     saveMessageButton.classList.add('hidden');
     clearMessageButton.classList.add('hidden');
+    likeButton.classList.add('hidden');
     showAllButton.classList.remove('hidden');
     personalButton.classList.remove('hidden');
     image.classList.remove('hidden');
@@ -69,19 +74,29 @@ function personalizeMessage() {
 }
 
 function returnAffirmation() {
+    var randomAffirmation = affirmations[randomIndex(affirmations)];
+    if(likedMessages.includes(randomAffirmation)){
+        randomAffirmation = randomAffirmation + " ❤️"
+    };
     if(nameInput.value){
-        messageText.innerText = nameInput.value + ", " + affirmations[randomIndex(affirmations)];
+        messageText.innerText = nameInput.value + ", " + randomAffirmation;
     }else{
-        messageText.innerText = affirmations[randomIndex(affirmations)]; 
+        messageText.innerText = randomAffirmation; 
     }
+    likeButton.classList.remove('hidden');
 }
 
 function returnMantra() {
+    var randomMantra = mantras[randomIndex(mantras)];
+    if(likedMessages.includes(randomMantra)){
+        randomMantra = randomMantra + " ❤️"
+    };
     if(nameInput.value){
-        messageText.innerText = nameInput.value + ", " + mantras[randomIndex(mantras)];
+        messageText.innerText = nameInput.value + ", " + randomMantra;
     }else{
-        messageText.innerText = mantras[randomIndex(mantras)];
+        messageText.innerText = randomMantra;
     }
+    likeButton.classList.remove('hidden');
 };
 
 function returnMessage() {
@@ -193,13 +208,34 @@ function showSaved(){
     };
     for (var i = 0; i < savedMessages.length; i++){
         arrayDisplay.innerHTML += `<p class="array-display">${savedMessages[i]}</p>`
+    };
+};  
+
+function likeMessage() {
+    if (!likedMessages.includes(messageText.innerText)){
+    likedMessages.push(messageText.innerText);
     }
-}  
+    console.log(likedMessages);
+}
 
-
+function showLikedMessages() {
+    event.preventDefault();
+    arrayDisplay.classList.toggle('hidden');
+    arrayDisplay.innerHTML = "";
+    if (showLikedButton.innerText === "Show Liked Messages"){
+        showLikedButton.innerText = "Hide Liked Messages"
+    }else{
+        showLikedButton.innerText = "Show Liked Messages"
+    };
+    for (var i = 0; i < likedMessages.length; i++){
+        arrayDisplay.innerHTML += `<p class="array-display">${likedMessages[i]}</p>`
+    }
+}
 
 // arrays 
 var savedMessages = [];
+
+var likedMessages = [];
 
 var affirmations = ["I forgive myself and set myself free.", 
 "I believe I can be all that I want to be.", 
