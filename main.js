@@ -21,7 +21,8 @@ var form = document.querySelector('.form');
 var showAffirmationsButton = document.querySelector('.show-affirmations');
 var showMantrasButton = document.querySelector('.show-mantras');
 var showSavedButton = document.querySelector('.show-saved');
-var arrayDisplay = document.querySelector('.array-display')
+var arrayDisplay = document.querySelector('.array-display');
+var backToMainButton = document.querySelector('.back-to-main');
 
 
 //event listeners
@@ -29,15 +30,35 @@ var arrayDisplay = document.querySelector('.array-display')
 receiveMessageButton.addEventListener('click', returnMessage);
 personalButton.addEventListener('click', showForm)
 saveMessageButton.addEventListener('click', saveMessage);
+clearMessageButton.addEventListener('click', backToMain)
 showAllButton.addEventListener('click', showAllMessages);
 showAffirmationsButton.addEventListener('click', showAffirmations);
 showMantrasButton.addEventListener('click', showMantras);
+showSavedButton.addEventListener('click', showSaved);
+backToMainButton.addEventListener('click', backToMain);
 
 //event handlers
 
 function randomIndex(array) {
     return Math.floor(Math.random() * array.length);
 };
+
+function backToMain(){
+    event.preventDefault();
+    showAllSection.classList.add('hidden');
+    form.classList.remove('hidden');
+    backToMainButton.classList.add('hidden');
+    affirmationButton.disabled = false;
+    mantraButton.disabled = false;
+    messageText.classList.add('hidden');
+    personalForm.classList.add('hidden');
+    saveMessageButton.classList.add('hidden');
+    clearMessageButton.classList.add('hidden');
+    showAllButton.classList.remove('hidden');
+    personalButton.classList.remove('hidden');
+    image.classList.remove('hidden');
+    receiveMessageButton.classList.remove('hidden');
+}
 
 function personalizeMessage() {
     if(nameInput.value){
@@ -67,6 +88,7 @@ function returnMessage() {
     event.preventDefault();
     image.classList.add('hidden');
     messageText.classList.remove('hidden');
+    showAllButton.classList.add('hidden');
     affirmationButton.disabled = true;
     mantraButton.disabled = true;
     if (!affirmationButton.checked && !mantraButton.checked && !messageInput.value){
@@ -85,6 +107,7 @@ function returnMessage() {
     mantraButton.checked = false;
 };
 
+//save section
 function saveMessage() {
     if (!saveAffirmationButton.checked && !saveMantraButton.checked){
         alert('Is this message an "affirmation" OR a "mantra"?')
@@ -96,11 +119,10 @@ function saveMessage() {
         };
     if (savedMessages[savedMessages.length-1] !== messageInput.value){
         savedMessages.push(messageInput.value)
-    }   
+    }
+    saveMessageButton.classList.add('hidden');
     returnMessage();
-    // console.log(savedMessages)
-    // console.log(mantras)
-    // console.log(affirmations)
+    messageInput.value = "";
 }
 
 function saveMantra(){
@@ -118,29 +140,28 @@ function saveAffirmation(){
 function showForm() {
     event.preventDefault();
     personalForm.classList.remove('hidden');
+    clearMessageButton.classList.remove('hidden');
     personalButton.classList.add('hidden');
     saveMessageButton.classList.remove('hidden');
     showAllButton.classList.add('hidden');
 }
 
+//message display section
 function showAllMessages() {
     event.preventDefault();
     showAllSection.classList.remove('hidden');
     form.classList.add('hidden');
+    backToMainButton.classList.remove('hidden');
 }
 
-// function showMessage(type){
-
-//     if (type === 'affirmations'){
-//         showAffirmations();
-//     }else if (type === 'mantras'){
-//         showMantras();
-//     }
-// }
 function showAffirmations(){
     event.preventDefault();
     arrayDisplay.classList.toggle('hidden');
-    showAffirmationsButton.innerText = "Hide Affirmations"
+    if (showAffirmationsButton.innerText === "Show Affirmations"){
+        showAffirmationsButton.innerText = "Hide Affirmations"
+    }else{
+        showAffirmationsButton.innerText = "Show Affirmations"
+    };
     arrayDisplay.innerHTML = "";
     for (var i = 0; i < affirmations.length; i++){
         arrayDisplay.innerHTML += `<p class="array-display">${affirmations[i]}</p>`
@@ -150,19 +171,32 @@ function showAffirmations(){
 function showMantras(){
     event.preventDefault();
     arrayDisplay.classList.toggle('hidden');
-    showMantrasButton.innerText = "Hide Mantras"
     arrayDisplay.innerHTML = "";
+    if (showMantrasButton.innerText === "Show Mantras"){
+        showMantrasButton.innerText = "Hide Mantras"
+    }else{
+        showMantrasButton.innerText = "Show Mantras"
+    };
     for (var i = 0; i < mantras.length; i++){
         arrayDisplay.innerHTML += `<p class="array-display">${mantras[i]}</p>`
     }
 }  
 
+function showSaved(){
+    event.preventDefault();
+    arrayDisplay.classList.toggle('hidden');
+    arrayDisplay.innerHTML = "";
+    if (showSavedButton.innerText === "Show Saved Messages"){
+        showSavedButton.innerText = "Hide Saved Messages"
+    }else{
+        showSavedButton.innerText = "Show Saved Messages"
+    };
+    for (var i = 0; i < savedMessages.length; i++){
+        arrayDisplay.innerHTML += `<p class="array-display">${savedMessages[i]}</p>`
+    }
+}  
 
 
-//pseudo
-//when a user selects a message type, that information should be passed to a function that iterates through it's corresponding array and returns an element.
-//the value of the innerText of the H2 element (.message) in the message container should be reassigned to the value that is returned from the array
-//when the 'receive message' button is clicked the hidden class needs to be applied to the image, and the class hidden needs to be removed from the message.
 
 // arrays 
 var savedMessages = [];

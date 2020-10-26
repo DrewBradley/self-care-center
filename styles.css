@@ -87,6 +87,10 @@ button {
     font-size: 1.3em;
     margin: 0.75em 2em;
     cursor: pointer;
+    transition: 0.2s ease-out;
+}
+button:hover {
+    transform: scale(1.03)
 }
 
 /* ~ MESSAGE STYLES ~ */
